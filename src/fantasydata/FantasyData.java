@@ -11,17 +11,27 @@ import org.json.JSONObject;
 public class FantasyData {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		String type = "";
+		if (args != null && args.length > 0) {
+			type = args[0];
+		}
 		
 		try {
-			String URL = "https://api.fantasydata.net/v3/nfl/odds/json/GameOddsByWeek/2018/1?key=eea45baa72c64bc6bd003b511e9e36d0";
-			URL obj = new URL(URL);
+			String uRL;
+			if (type.equals("NFL")) {
+				uRL = "https://api.fantasydata.net/v3/nfl/odds/json/GameOddsByWeek/2018/1?key=eea45baa72c64bc6bd003b511e9e36d0";
+			}
+			else {
+				uRL = "https://api.fantasydata.net/v3/cfb/odds/json/GameOddsByWeek/2017POST/1?key=712e473edfa34aaf82cdf73469a772b7"; // 2018/13
+			}
+			URL obj = new URL(uRL);
 			HttpURLConnection con = (HttpURLConnection)obj.openConnection();
 			int responseCode = con.getResponseCode();
 			//System.out.println("Response Code : " + responseCode);
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())); 
 			JSONArray all = new JSONArray(in.readLine());
 			in .close();
+			System.out.println(all.length() + " games");
 			for (int i = 0; i < all.length(); i++) {
 				JSONObject game = all.getJSONObject(i);
 				System.out.print(game.getString("AwayTeamName") + " at " + game.getString("HomeTeamName"));
